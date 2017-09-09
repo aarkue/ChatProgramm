@@ -100,13 +100,13 @@ private List<Integer> ports = new List<>();
     }
 
     private String getName(String ip, Integer port){
-        System.out.println("2nd " +ips.hasAccess()+ " ," + ports.hasAccess());
+        System.out.println("2nd " +ips.hasAccess()+ " ," + ports.hasAccess()+ip+":"+port);
         names.toFirst();
         ips.toFirst();
         ports.toFirst();
         while(ips.hasAccess() && ips.getContent() != null && ports.hasAccess() && ports.getContent() != null){
             System.out.println("2nd Name: " + names.getContent()+ " IP: " +ips.getContent()+ ":"+ports.getContent());
-            if(ips.getContent().equals(ip) && ports.getContent() == port){
+            if(ips.getContent().equals(ip) && ports.getContent().equals(port)){
                 return names.getContent();
             }else{
                 names.next();
