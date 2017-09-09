@@ -1,12 +1,14 @@
+package abiturklassen;
+
 /**
  * <p>
  * Materialien zu den zentralen NRW-Abiturpruefungen im Fach Informatik ab 2018
  * </p>
  * <p>
- * Generische Klasse List<ContentType>
+ * Generische Klasse abiturklassen.List<ContentType>
  * </p>
  * <p>
- * Objekt der generischen Klasse List verwalten beliebig viele linear
+ * Objekt der generischen Klasse abiturklassen.List verwalten beliebig viele linear
  * angeordnete Objekte vom Typ ContentType. Auf hoechstens ein Listenobjekt,
  * aktuellesObjekt genannt, kann jeweils zugegriffen werden.<br />
  * Wenn eine Liste leer ist, vollstaendig durchlaufen wurde oder das aktuelle
@@ -263,7 +265,7 @@ public class List<ContentType> {
    * unveraendert. Insbesondere bleibt hasAccess identisch.
    * 
    * @param pList
-   *            die am Ende anzuhaengende Liste vom Typ List<ContentType>
+   *            die am Ende anzuhaengende Liste vom Typ abiturklassen.List<ContentType>
    */
   public void concat(List<ContentType> pList) {
     if (pList != this && pList != null && !pList.isEmpty()) { // Nichts tun,

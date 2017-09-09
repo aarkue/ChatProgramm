@@ -1,76 +1,108 @@
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+package ChatProgramm;
+
+import abiturklassen.List;
+import abiturklassen.Server;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by aarkue on 07.09.17.
  */
 public class ChatServer extends Server {
-private List<String> names = new List<>();
-private List<String> ips = new List<>();
-private List<Integer> ports = new List<>();
+private final List<String> names = new List<>();
+private final List<String> ips = new List<>();
+private final List<Integer> ports = new List<>();
     public ChatServer(int pPortNr) {
         super(pPortNr);
     }
 
+    private void printDebug(String text){
+        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        Date dateobj = new Date();
+        System.out.println(df.format(dateobj)+" SERVER: "+text);
+    }
+
     public void processNewConnection(String pClientIP, int pClientPort) {
-        System.out.println("(Server) New Connection from " + pClientIP +":"+pClientPort);
+        printDebug("New abiturklassen.Connection from " + pClientIP +":"+pClientPort);
     }
 
     public void processMessage(String pClientIP, int pClientPort, String pMessage) {
-        System.out.println(pMessage);
+        printDebug("Message received (From "+pClientIP+":"+pClientIP+"): "+ pMessage);
         if(pMessage.matches(	"SEND \\S+ .+")){
-            System.out.println("SEND DETECTED");
             String newMessage = pMessage.substring(5);
             String username = newMessage.split(" ")[0];
             String message = newMessage.substring(newMessage.indexOf(" ")+1);
             String[] ipandport = getIPandPort(username.toLowerCase());
             if(ipandport == null){
-                send(pClientIP,pClientPort,"-ERR Could not send message!");
+                printDebug("-ERR: SEND failed. User "+username.toLowerCase() + " is not available.");
+                send(pClientIP,pClientPort,"-ERR Could not send message! "+username +" is not available!");
             }else{
                 String name = getName(pClientIP,pClientPort);
                 if(name == null){
-                    send(pClientIP,pClientPort,"-ERR Could not send message! Username error");
+                    send(pClientIP,pClientPort,"-ERR Could not send message! You are not logged in.");
+                    printDebug("-ERR: SEND failed. Sending user is not logged in.");
                 }else{
                 send(ipandport[0],Integer.parseInt(ipandport[1]),name+": "+message);
                 send(pClientIP,pClientPort,"+OK " + name+": "+message);
-                System.out.println("DONE " +message);
+                printDebug("Sent message to both clients.");
                 }
             }
 
         }else if(pMessage.matches("LOGIN \\S+")) {
             String name = pMessage.substring(6);
-            System.out.println("testing name " + name);
            if(isNameAvailable(name)){
                names.append(name.toLowerCase());
                ips.append(pClientIP);
                ports.append(pClientPort);
-               System.out.println("Name " + name.toLowerCase() + " logged in!");
-               send(pClientIP,pClientPort,"+OK Username "+name.toLowerCase()+" succesfully logged in!");
+               printDebug("User "+name.toLowerCase()+" logged in successfully");
+               send(pClientIP,pClientPort,"+OK Username "+name.toLowerCase()+" successfully logged in!");
            }else {
-               System.out.println("Could NOT log in " + name.toLowerCase() + "!");
-               send(pClientIP, pClientPort, "-ERR Login using  " + name.toLowerCase() + "  failed!");
+               printDebug("Login failed: Username "+name.toLowerCase()+" is already taken");
+               send(pClientIP, pClientPort, "-ERR Login using  " + name.toLowerCase() + "  failed! Try another username.");
            }
-
-
         }else if(pMessage.equals("LIST")) {
+            printDebug("Listing online users.");
             names.toFirst();
-            String online = "Online Users: ";
+            StringBuilder online = new StringBuilder("+OK Online Users: ");
             while(names.hasAccess() && names.getContent() != null){
-                online += names.getContent()+", ";
+                online.append(names.getContent()).append(", ");
+                names.next();
             }
-            sendToAll(online);
+            sendToAll(online.toString());
 
         }else{
-
-            System.out.println("(Server) New Message from " + pClientIP + ":" + pClientPort + ";;" + pMessage);
-           send(pClientIP,pClientPort,"-ERR Unrecognized Commend: "+pMessage);
+            printDebug("-ERR Unrecognized Command: "+pMessage);
+            send(pClientIP,pClientPort,"-ERR Unrecognized Command: "+pMessage);
         }
     }
 
     public void processClosingConnection(String pClientIP, int pClientPort) {
-        System.out.println("Close Connection from " + pClientIP +":"+pClientPort);
-     // FXApplication.updateDebug("Closing Connection from " + pClientIP +":"+pClientPort);
+        printDebug("abiturklassen.Client " + deleteUser(pClientIP,pClientPort) + " ("+pClientIP +":"+pClientPort+") disconnected.");
     }
+
+    private String deleteUser(String ip, int port) {
+        names.toFirst();
+        ips.toFirst();
+        ports.toFirst();
+        while(ips.hasAccess() && ips.getContent() != null && ports.hasAccess() && ports.getContent() != null){
+            if(ips.getContent().equals(ip) && ports.getContent().equals(port)){
+                String username = names.getContent();
+                names.remove();
+                ips.remove();
+                ports.remove();
+                return username;
+            }else{
+                names.next();
+                ips.next();
+                ports.next();
+            }
+        }
+        return "User not found";
+
+    }
+
     private boolean isNameAvailable(String name){
         names.toFirst();
         while(names.hasAccess() && names.getContent() != null){
@@ -81,13 +113,12 @@ private List<Integer> ports = new List<>();
         }
         return true;
     }
+
     private String[] getIPandPort(String name){
-        System.out.println(names.hasAccess());
         names.toFirst();
         ips.toFirst();
         ports.toFirst();
         while(names.hasAccess() && names.getContent() != null){
-            System.out.println("Name: " + names.getContent()+ " IP: " +ips.getContent()+ ":"+ports.getContent());
             if(names.getContent().equals(name)){
                 return new String[]{ips.getContent(),""+ports.getContent()};
             }else{
@@ -100,12 +131,10 @@ private List<Integer> ports = new List<>();
     }
 
     private String getName(String ip, Integer port){
-        System.out.println("2nd " +ips.hasAccess()+ " ," + ports.hasAccess()+ip+":"+port);
         names.toFirst();
         ips.toFirst();
         ports.toFirst();
         while(ips.hasAccess() && ips.getContent() != null && ports.hasAccess() && ports.getContent() != null){
-            System.out.println("2nd Name: " + names.getContent()+ " IP: " +ips.getContent()+ ":"+ports.getContent());
             if(ips.getContent().equals(ip) && ports.getContent().equals(port)){
                 return names.getContent();
             }else{

@@ -13,7 +13,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-       <TitledPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+       <TitledPane text="ChatProgramm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408.0" prefWidth="607.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
            <content>
                <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                    <tabs>
@@ -23,18 +23,22 @@
                                    <content>
                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="335.0" prefWidth="597.0">
                                            <children>
-                                               <TextField fx:id="cmdtxt" layoutX="14.0" layoutY="295.0" prefHeight="26.0" prefWidth="501.0" text="SEND user1 Test!" />
-                                               <Button fx:id="sendenbtn" layoutX="527.0" layoutY="296.0" mnemonicParsing="false" onAction="#senddebug" text="Senden" />
-                                               <TextField fx:id="namefield" layoutX="14.0" layoutY="14.0" promptText="Username" text="aar" />
-                                               <Button layoutX="535.0" layoutY="14.0" mnemonicParsing="false" onAction="#login" text="Log In" />
-                                               <TextField fx:id="serveripfield" layoutX="175.0" layoutY="14.0" promptText="Server-IP" text="localhost" />
-                                               <TextField fx:id="serverportfield" layoutX="333.0" layoutY="14.0" prefHeight="25.0" prefWidth="51.0" promptText="Port" text="3333" />
+                                               <TextField fx:id="cmdtxt" layoutX="14.0" layoutY="295.0" prefHeight="26.0" prefWidth="501.0" promptText="Command" text="" />
+                                               <Button fx:id="sendenbtn" layoutX="527.0" layoutY="296.0" mnemonicParsing="false" onAction="#senddebug" text="Send!" />
+                                               <TextField fx:id="namefield" layoutX="14.0" layoutY="14.0" promptText="Username" text="" />
+                                               <TextField fx:id="serveripfield" layoutX="175.0" layoutY="14.0" promptText="Server-IP" text="" />
                                                <Label layoutX="327.0" layoutY="13.0" prefHeight="17.0" prefWidth="6.0" text=":">
                                                    <font>
                                                        <Font size="19.0" />
                                                    </font>
                                                </Label>
-                                               <TextFlow fx:id="debugtxt" layoutX="14.0" layoutY="41.0" prefHeight="248.0" prefWidth="571.0" />
+                                               <TextField fx:id="serverportfield" layoutX="333.0" layoutY="14.0" prefHeight="25.0" prefWidth="51.0" promptText="Port" text="" />
+                                               <Button layoutX="535.0" layoutY="14.0" mnemonicParsing="false" onAction="#login" text="Log In" />
+                                               <ScrollPane fx:id="scrollPane" layoutX="13.0" layoutY="40.0" prefHeight="248.0" prefWidth="572.0">
+                                                   <content>
+                                                       <TextFlow fx:id="debugtxt" layoutX="14.0" layoutY="41.0" prefHeight="248.0" prefWidth="554.0" />
+                                                   </content>
+                                               </ScrollPane>
                                            </children>
                                        </AnchorPane>
                                    </content>
@@ -47,8 +51,12 @@
                                    <content>
                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="335.0" prefWidth="597.0">
                                            <children>
-                                               <Button layoutX="535.0" layoutY="14.0" mnemonicParsing="false" onAction="#createServer" text="Start Server!" />
-                                               <TextField fx:id="cserverport" layoutX="333.0" layoutY="14.0" prefHeight="25.0" prefWidth="51.0" promptText="Port" text="3333" />
+                                               <TextField fx:id="cserverport" layoutX="22.0" layoutY="27.0" prefHeight="107.0" prefWidth="172.0" promptText="Port" text="3333">
+                                       <font>
+                                          <Font size="50.0" />
+                                       </font></TextField>
+                                               <Button layoutX="205.0" layoutY="27.0" mnemonicParsing="false" onAction="#createServer" prefHeight="107.0" prefWidth="81.0" text="Start Server!" />
+                                                <Label fx:id="iplabel" layoutX="22.0" layoutY="151.0" text="" />
                                            </children>
                                        </AnchorPane>
                                    </content>

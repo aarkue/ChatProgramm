@@ -1,14 +1,14 @@
-/**
+package abiturklassen; /**
  * <p>
  * Materialien zu den zentralen NRW-Abiturpruefungen im Fach Informatik ab 2018
  * </p>
  * <p>
- * Klasse Connection
+ * Klasse abiturklassen.Connection
  * </p>
  * <p>
- * Objekte der Klasse Connection ermoeglichen eine Netzwerkverbindung zu einem
- * Server mittels TCP/IP-Protokoll. Nach Verbindungsaufbau koennen Zeichenketten
- * (Strings) zum Server gesendet und von diesem empfangen werden. Zur
+ * Objekte der Klasse abiturklassen.Connection ermoeglichen eine Netzwerkverbindung zu einem
+ * abiturklassen.Server mittels TCP/IP-Protokoll. Nach Verbindungsaufbau koennen Zeichenketten
+ * (Strings) zum abiturklassen.Server gesendet und von diesem empfangen werden. Zur
  * Vereinfachung geschieht dies zeilenweise, d. h., beim Senden einer
  * Zeichenkette wird ein Zeilentrenner ergaenzt und beim Empfang wird dieser
  * entfernt. Es findet nur eine rudimentaere Fehlerbehandlung statt, so dass z.B.
