@@ -4,13 +4,13 @@ import ChatProgramm.ChatServer;
 import abiturklassen.Server;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,10 +36,22 @@ public class Controller {
     private Label iplabel;
     @FXML
     private ScrollPane scrollPane;
+    @FXML
+    private CheckBox replacebox;
 
     private Server server;
     private ChatClient client;
+    private FileWriter writer;
 
+    public Controller() {
+        DateFormat df = new SimpleDateFormat("YYYY-MM-dd-HH-mm-ss");
+        Date dateobj = new Date();
+        try {
+            writer = new FileWriter(new File(df.format(dateobj) + "-chat.log"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void senddebug(ActionEvent event)
@@ -82,12 +94,25 @@ public class Controller {
     }
 
     public void log(String toLog){
-        scrollPane.setVvalue(scrollPane.getVmax());
         DateFormat df = new SimpleDateFormat("HH:mm:ss");
         Date dateobj = new Date();
         System.out.println(df.format(dateobj) + ":  "+ toLog);
+        try {
+            writer.append(df.format(dateobj) + ": " + toLog + System.getProperty("line.separator"));
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (replacebox.isSelected()) {
+            toLog = toLog.replaceAll(":\\)", "😁")
+                    .replaceAll(":\\(", "🙁")
+                    .replaceAll(":/", "\uD83D\uDE15")
+                    .replaceAll("<3", "❤")
+                    .replaceAll(":\\*", "\uD83D\uDE18");
+        }
         Text[] text = {new Text(df.format(dateobj)), new Text(": " + toLog + System.getProperty("line.separator"))};
         text[0].setStyle("-fx-font-weight: bold");
-        updateDebug( text);
+        updateDebug(text);
+        scrollPane.setVvalue(scrollPane.getVmax());
     }
 }

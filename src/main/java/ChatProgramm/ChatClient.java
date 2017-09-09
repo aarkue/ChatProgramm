@@ -19,7 +19,9 @@ public class ChatClient extends Client {
 
     public void processMessage(String pMessage) {
         System.out.println("CLIENT Message: " + pMessage);
-        Platform.runLater(() -> controller.log(pMessage));
+        Platform.runLater(() -> controller.log(
+                pMessage
+        ));
     }
 
 
